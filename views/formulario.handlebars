@@ -1,0 +1,95 @@
+<html>
+
+    <main>
+    <div class="container">
+        <div class="row">
+            <div class="col-6 offset-3">
+
+              {{#condicionalIgualdade situacao "okCadastro"}} 
+              <div class="alert alert-success">Conteúdo cadastrado com sucesso!</div> 
+              {{/condicionalIgualdade}}
+
+
+                <form action="/cadastrar" method="post" enctype="multipart/form-data">
+                    <input type="text" name="nome" class="form-control" placeholder="Título">
+                    <input type="text" name="descricao" class="form-control" placeholder="Descrição">
+                    <input type="text" name="categoria" class="form-control" placeholder="Categoria">
+                    <input type="file" name="imagem" class="form-control">
+                    <input type="submit" class="btn btn-primary" value="Cadastrar">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row">
+            {{#each conteudos}}
+            <div class="col-12">
+                <div class="card card-expandable" data-toggle="modal" data-target="#detailModal" data-nome="{{nome}}" data-descricao="{{descricao}}" data-categoria="{{categoria}}" data-imagem="../imagens/{{imagem}}">
+                    <img src="../imagens/{{imagem}}" class="card-img-top">
+                    <div class="textos card-body">
+                       <p class="titulo">{{nome}}</p>
+                       <p class="descricao">{{descricao}}</p>
+                       <p class="categoria">{{categoria}}</p>   
+                    </div>
+                    <div class="card-footer">
+                        <a href="/formularioEditar/{{codigo}}" class="btn btn-warning">Alterar</a>
+                        <a href="/remover/{{codigo}}&{{imagem}}" class="btn btn-danger">Remover</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</main>
+
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Detalhes do Conteúdo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" src="" class="img-fluid mb-3" alt="Imagem do Conteúdo">
+                <h5 id="modalNome"></h5>
+                <p id="modalDescricao"></p>
+                <p id="modalCategoria"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery e Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Seu script para configurar o modal -->
+<script>
+    $(document).ready(function() {
+        $('#detailModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Botão que acionou o modal
+            var nome = button.data('nome'); // Extraí dados do atributo data-* do botão
+            var descricao = button.data('descricao');
+            var categoria = button.data('categoria');
+            var imagem = button.data('imagem');
+
+            // Atualiza o conteúdo do modal
+            var modal = $(this);
+            modal.find('#modalNome').text(nome);
+            modal.find('#modalDescricao').text(descricao);
+            modal.find('#modalCategoria').text(categoria);
+            modal.find('#modalImage').attr('src', imagem);
+        });
+    });
+</script>
+
+</html>
+
+
